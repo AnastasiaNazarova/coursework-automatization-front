@@ -1,6 +1,6 @@
 <template>
   <v-app-bar app>
-    <v-toolbar-title>Аукцион</v-toolbar-title>
+    <v-toolbar-title class="header-title" @click="goHome">Аукцион</v-toolbar-title>
     <v-spacer></v-spacer>
     <div v-if="isAuth">
       <v-btn text @click="openCabinet">{{ login }}</v-btn>
@@ -172,17 +172,27 @@ export default {
       }
     },
     openCabinet() {
-      this.$router.push({name: 'cabinet'})
+      if (this.$route.name !== 'cabinet') {
+        this.$router.push({name: 'cabinet'});
+      }
     },
     logout() {
-      this.$store.commit('setUserInfo', null)
+      this.$store.commit('setUserInfo', null);
       this.$store.commit('setIsAuth', false);
+    },
+    goHome() {
+      if (this.$route.name !== 'mainPage') {
+        this.$router.push({name: 'mainPage'});
+      }
     }
   }
 }
 </script>
 
 <style lang="scss">
+.header-title {
+  cursor: pointer;
+}
 .v-toolbar__content {
   justify-content: center;
 }

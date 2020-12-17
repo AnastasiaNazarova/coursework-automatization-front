@@ -11,8 +11,8 @@
       ></v-text-field>
 
       <v-text-field
-          v-model="startPrice"
-          :rules="startPriceRules"
+          v-model="initialRate"
+          :rules="initialRateRules"
           label="Начальная ставка"
           required
           clearable
@@ -30,13 +30,13 @@
           ref="dateMenu"
           v-model="dateMenu"
           :close-on-content-click="false"
-          :return-value.sync="finalDate"
+          :return-value.sync="salesEndDate"
           transition="scale-transition"
       >
         <template v-slot:activator="{ on, attrs }">
           <v-text-field
-              v-model="finalDate"
-              :rules="finalDateRules"
+              v-model="salesEndDate"
+              :rules="salesEndDateRules"
               label="Дата окончания приема ставок"
               prepend-icon="mdi-calendar"
               required
@@ -47,7 +47,7 @@
           ></v-text-field>
         </template>
         <v-date-picker
-            v-model="finalDate"
+            v-model="salesEndDate"
             locale="ru"
             first-day-of-week="1"
         >
@@ -62,7 +62,7 @@
           <v-btn
               text
               color="primary"
-              @click="$refs.dateMenu.save(finalDate)"
+              @click="$refs.dateMenu.save(salesEndDate)"
           >
             OK
           </v-btn>
@@ -95,16 +95,16 @@ export default {
   data() {
     return {
       name: null,
-      startPrice: null,
+      initialRate: null,
       quantity: null,
-      finalDate: null,
+      salesEndDate: null,
       picture: null,
       nameRules: [v => !!v || 'Поле обязательно для заполнения'],
-      startPriceRules: [v => !!v || 'Поле обязательно для заполнения',
+      initialRateRules: [v => !!v || 'Поле обязательно для заполнения',
         v => !!(v && Number(v)) || 'Некорректное значение, введите число'],
       quantityRules: [v => !!v || 'Поле обязательно для заполнения',
         v => !!(v && Number(v)) || 'Некорректное значение, введите число'],
-      finalDateRules: [v => !!v || 'Поле обязательно для заполнения'],
+      salesEndDateRules: [v => !!v || 'Поле обязательно для заполнения'],
       pictureRules: [v => !!v || 'Поле обязательно для заполнения'],
       dateMenu: false
     }
@@ -117,10 +117,10 @@ export default {
           console.log(result)
           this.$store.dispatch('addLot', {
             name: this.name,
-            startPrice: this.startPrice,
-            currentPrice: this.startPrice,
+            initialRate: this.initialRate,
+            currentRate: this.initialRate,
             quantity: this.quantity,
-            finalDate: new Date(this.finalDate),
+            salesEndDate: new Date(this.salesEndDate),
             picture: result
           }).then(() => {
             this.$router.push({name: 'mainPage'});

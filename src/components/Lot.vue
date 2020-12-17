@@ -1,13 +1,13 @@
 <template>
   <div class="lot">
     <v-card max-width="320">
-      <v-img width="auto" :src="image"/>
+      <v-img width="auto" height="250" :src="picture"/>
       <v-card-title>{{ name }}</v-card-title>
       <v-card-text>
-        <div>Начальная ставка: {{ startPrice }}</div>
-        <div>Текущая ставка: {{ currentPrice }}</div>
+        <div>Начальная ставка: {{ initialRate }}</div>
+        <div>Текущая ставка: {{ currentRate }}</div>
         <div>Количество: {{ quantity }}</div>
-        <div>Дата окончания приема ставок: {{ finalDate }}</div>
+        <div>Дата окончания приема ставок: {{ salesEndDate }}</div>
       </v-card-text>
       <v-divider></v-divider>
       <v-card-actions class="lot_actions">
@@ -42,16 +42,16 @@ export default {
   data() {
     return {
       name: this.item.name,
-      startPrice: this.item.startPrice,
-      currentPrice: this.item.currentPrice,
+      initialRate: this.item.initialRate,
+      currentRate: this.item.currentRate,
       quantity: this.item.quantity,
-      finalDate: this.item.finalDate.toLocaleDateString(),
-      image: this.item.picture,
+      salesEndDate: this.item.salesEndDate,
+      picture: this.item.picture,
       count: 0,
       newPrice: null,
       newPriceRules: [v => !!v || 'Поле обязательно для заполнения',
         v => !!(v && Number(v)) || 'Некорректное значение, введите число',
-        v => !!(v && Number(v) > this.currentPrice) || 'Ставка должна быть выше текущей ставки']
+        v => !!(v && Number(v) > this.currentRate) || 'Ставка должна быть выше текущей ставки']
     }
   },
   computed: {
@@ -66,11 +66,21 @@ export default {
     addLot() {
       if (this.$refs.newPrice.validate()) {
         this.count++;
+        this.$store.dispatch('addActiveUserLot', {
+          name: this.name,
+          count: this.count,
+          price: this.newPrice
+        })
         //TODO вызов сервиса, который добавляет лот в корзину
       }
     },
     deleteLot() {
       this.count--;
+      this.$store.dispatch('deleteActiveUserLot', {
+        name: this.name,
+        count: this.count,
+        price: this.newPrice
+      })
       //TODO вызов сервиса, который удаляет лот из корзины
     }
   }

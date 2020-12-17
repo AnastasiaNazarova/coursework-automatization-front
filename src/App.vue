@@ -11,7 +11,18 @@
 import Header from "@/components/Header";
 export default {
   name: 'App',
-  components: {Header}
+  components: { Header },
+  beforeMount() {
+    this.checkIsAuth();
+  },
+  methods: {
+    checkIsAuth() {
+      const isAuth = sessionStorage.getItem('isAuth');
+      if (isAuth) {
+        this.$store.commit('setIsAuth', isAuth);
+      }
+    }
+  }
 };
 </script>
 

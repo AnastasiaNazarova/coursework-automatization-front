@@ -10,9 +10,11 @@ export default {
     mutations: {
         setIsAuth(state, value) {
             state.isAuth = value;
+            sessionStorage.setItem('isAuth', value)
         },
         setUserInfo(state, value) {
-            state.userInfo = value
+            state.userInfo = value;
+            sessionStorage.setItem('userInfo', value)
         }
     },
     actions: {}
