@@ -19,37 +19,31 @@
         v-for="item in items"
         :key="item"
     >
-      <lots-table
+      <rates-table
           v-if="isShowTable"
-          :is-active-lots="isActiveLots"
+          :is-active-rates="isActiveRates"
       />
-      <user-info v-if="isShowUserInfo"/>
-<!--      <v-card-->
-<!--          color="basil"-->
-<!--          flat-->
-<!--      >-->
-<!--        <v-card-text>{{ text }}</v-card-text>-->
-<!--      </v-card>-->
+<!--      <user-info v-if="isShowUserInfo"/>-->
     </v-tab-item>
   </v-tabs-items>
 </div>
 </template>
 
 <script>
-import LotsTable from "@/components/LotsTable";
+import RatesTable from "@/components/RatesTable";
 import UserInfo from "@/components/UserInfo";
 
 export default {
   name: 'Cabinet',
   components: {
-    LotsTable,
+    RatesTable,
     UserInfo
   },
   data () {
     return {
       tab: null,
       items: [
-        'Активные сделки', 'Завершенные сделки', 'Личная информация'
+        'Активные сделки', 'Завершенные сделки'/*, 'Личная информация'*/
       ],
       headers: [],
       products: []
@@ -59,7 +53,7 @@ export default {
     isShowTable() {
       return [0, 1].includes(this.tab)
     },
-    isActiveLots() {
+    isActiveRates() {
       return this.tab === 0
     },
     isShowUserInfo() {

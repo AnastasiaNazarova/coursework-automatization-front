@@ -14,12 +14,19 @@ export default {
   components: { Header },
   beforeMount() {
     this.checkIsAuth();
+    this.checkUserInfo();
   },
   methods: {
     checkIsAuth() {
       const isAuth = sessionStorage.getItem('isAuth');
       if (isAuth) {
         this.$store.commit('setIsAuth', isAuth);
+      }
+    },
+    checkUserInfo() {
+      const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+      if (userInfo) {
+        this.$store.commit('setUserInfo', userInfo);
       }
     }
   }

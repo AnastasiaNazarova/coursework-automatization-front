@@ -25,6 +25,7 @@
               text
               v-bind="attrs"
               v-on="on"
+              @click="openRegistrationForm"
           >
             Зарегистрироваться
           </v-btn>
@@ -159,15 +160,22 @@ export default {
     },
     signIn() {
       if (this.$refs.form.validate()) {
-        //TODO
-        this.$store.commit('setUserInfo', {login: this.login})
-        this.$store.commit('setIsAuth', true);
+        this.$store.dispatch('loginUser', {
+          login: this.login,
+          password: this.password
+        })
         this.closeAuthForm();
       }
     },
     signUp() {
       if (this.$refs.form.validate()) {
-        //TODO
+        this.$store.dispatch('registrationUser', {
+          surname: this.surname,
+          name: this.name,
+          login: this.login,
+          password: this.password
+        })
+        //TODO регистрация прошла успешно
         this.closeAuthForm();
       }
     },
@@ -177,8 +185,7 @@ export default {
       }
     },
     logout() {
-      this.$store.commit('setUserInfo', null);
-      this.$store.commit('setIsAuth', false);
+      this.$store.dispatch('logoutUser')
     },
     goHome() {
       if (this.$route.name !== 'mainPage') {

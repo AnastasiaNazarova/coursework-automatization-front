@@ -1,3 +1,15 @@
 {
-  "getActiveLots": "/lots"
+  "lots": {
+    "getActiveLots": "/lots",
+    "addLot": "/lots/add"
+  },
+  "users": {
+    "registrationUser": "/user/registration",
+    "loginUser": "/user/login"
+  },
+  "rates":{
+    "addRate": "/rate/add",
+    "getActiveRates": "/rate/active/",
+    "getClosedRates": "/rate/closed/"
+  }
 }

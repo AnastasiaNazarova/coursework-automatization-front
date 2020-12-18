@@ -18,14 +18,6 @@
           clearable
       ></v-text-field>
 
-      <v-text-field
-          v-model="quantity"
-          :rules="quantityRules"
-          label="Количество"
-          required
-          clearable
-      ></v-text-field>
-
       <v-menu
           ref="dateMenu"
           v-model="dateMenu"
@@ -96,13 +88,10 @@ export default {
     return {
       name: null,
       initialRate: null,
-      quantity: null,
       salesEndDate: null,
       picture: null,
       nameRules: [v => !!v || 'Поле обязательно для заполнения'],
       initialRateRules: [v => !!v || 'Поле обязательно для заполнения',
-        v => !!(v && Number(v)) || 'Некорректное значение, введите число'],
-      quantityRules: [v => !!v || 'Поле обязательно для заполнения',
         v => !!(v && Number(v)) || 'Некорректное значение, введите число'],
       salesEndDateRules: [v => !!v || 'Поле обязательно для заполнения'],
       pictureRules: [v => !!v || 'Поле обязательно для заполнения'],
@@ -112,14 +101,11 @@ export default {
   methods: {
     submit() {
       if (this.$refs.form.validate()) {
-        //TODO сделать отправку данных на бэк
         this.getBase64(this.picture). then(result => {
-          console.log(result)
           this.$store.dispatch('addLot', {
             name: this.name,
             initialRate: this.initialRate,
             currentRate: this.initialRate,
-            quantity: this.quantity,
             salesEndDate: new Date(this.salesEndDate),
             picture: result
           }).then(() => {

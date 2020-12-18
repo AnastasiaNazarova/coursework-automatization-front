@@ -1,3 +1,5 @@
+import Users from "@/store/actors/users";
+
 export default {
     state: {
         isAuth: false,
@@ -14,8 +16,25 @@ export default {
         },
         setUserInfo(state, value) {
             state.userInfo = value;
-            sessionStorage.setItem('userInfo', value)
+            sessionStorage.setItem('userInfo', JSON.stringify(value))
         }
     },
-    actions: {}
+    actions: {
+        async registrationUser({commit, state}, obj) {
+            await Users.registrationUser(obj);
+        },
+        async loginUser({commit, state}, obj) {
+            await Users.loginUser(obj).then(response => {
+                console.log(response)
+                if (response.status === 200 && response.data) {
+                    commit('setIsAuth', true);
+                    commit('setUserInfo', response.data)
+                }
+            })
+        },
+        logoutUser({commit, state}) {
+            commit('setIsAuth', false);
+            commit('setUserInfo', null);
+        }
+    }
 }

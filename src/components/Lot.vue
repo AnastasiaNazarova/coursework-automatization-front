@@ -1,12 +1,11 @@
 <template>
   <div class="lot">
     <v-card max-width="320">
-      <v-img width="auto" height="250" :src="picture"/>
+      <v-img width="auto" height="300" :src="picture"/>
       <v-card-title>{{ name }}</v-card-title>
       <v-card-text>
         <div>Начальная ставка: {{ initialRate }}</div>
         <div>Текущая ставка: {{ currentRate }}</div>
-        <div>Количество: {{ quantity }}</div>
         <div>Дата окончания приема ставок: {{ salesEndDate }}</div>
       </v-card-text>
       <v-divider></v-divider>
@@ -21,12 +20,8 @@
               clearable
           ></v-text-field>
         </div>
-        <div class="lot_actions__count">
-          <div class="btn">
-            <v-btn :disabled="isDisableDeleteBtn" @click="deleteLot">-</v-btn>
-            <v-btn :disabled="isDisableAddBtn" @click="addLot">+</v-btn>
-          </div>
-          <div>Выбрано: {{ count }}</div>
+        <div class="lot_actions__submit">
+          <v-btn text :disabled="isDisableAddRateBtn" @click="addRate">Сделать ставку</v-btn>
         </div>
       </v-card-actions>
     </v-card>
@@ -41,47 +36,43 @@ export default {
   },
   data() {
     return {
+      id: this.item.id,
       name: this.item.name,
       initialRate: this.item.initialRate,
       currentRate: this.item.currentRate,
-      quantity: this.item.quantity,
-      salesEndDate: this.item.salesEndDate,
+      salesEndDate: new Date(this.item.salesEndDate).toLocaleDateString(),
       picture: this.item.picture,
-      count: 0,
       newPrice: null,
       newPriceRules: [v => !!v || 'Поле обязательно для заполнения',
-        v => !!(v && Number(v)) || 'Некорректное значение, введите число',
+        v => !!(v && Number(v) && (Number(v) ^ 0) === Number(v)) || 'Некорректное значение, введите целое число',
         v => !!(v && Number(v) > this.currentRate) || 'Ставка должна быть выше текущей ставки']
     }
   },
   computed: {
-    isDisableAddBtn() {
-      return this.count >= this.quantity
+    isAuth() {
+      return this.$store.getters.getIsAuth
     },
-    isDisableDeleteBtn() {
-      return this.count === 0;
+    isDisableAddRateBtn() {
+      return !this.isAuth || !this.isCorrectValue
+    },
+    isCorrectValue() {
+      return this.newPrice
+          && Number(this.newPrice)
+          && Number(this.newPrice) > this.currentRate
+          && (Number(this.newPrice) ^ 0) === Number(this.newPrice)
     }
   },
   methods: {
-    addLot() {
-      if (this.$refs.newPrice.validate()) {
-        this.count++;
-        this.$store.dispatch('addActiveUserLot', {
-          name: this.name,
-          count: this.count,
-          price: this.newPrice
-        })
-        //TODO вызов сервиса, который добавляет лот в корзину
-      }
-    },
-    deleteLot() {
-      this.count--;
-      this.$store.dispatch('deleteActiveUserLot', {
-        name: this.name,
-        count: this.count,
-        price: this.newPrice
+    addRate() {
+      this.$store.dispatch('addRate', {
+        lotId: this.id,
+        price: Number(this.newPrice),
+        userId: this.$store.getters.getUserInfo.id,
+        isActive: true
+      }).then(() => {
+        // this.newPrice = null
+        this.$store.dispatch('setActiveLots');
       })
-      //TODO вызов сервиса, который удаляет лот из корзины
     }
   }
 }
@@ -94,13 +85,10 @@ export default {
   &_actions {
     display: block !important;
 
-    &__count {
+    &__submit {
       display: flex;
-      justify-content: space-between;
-    }
-
-    .btn button {
-      margin-right: 5px;
+      justify-content: center;
+      margin-top: 10px;
     }
   }
 }
