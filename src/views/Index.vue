@@ -1,10 +1,10 @@
 <template>
   <div class="main-page">
     <div class="add-lot">
-      <v-btn @click="addLot">Добавить новый лот</v-btn>
+      <v-btn v-if="isAuth" @click="addLot">Добавить новый лот</v-btn>
     </div>
     <div class="lots">
-      <Lot v-for="lot in lots" :key="lot.name" :item="lot"/>
+      <Lot v-for="lot in lots" :key="lot.id + lot.currentRate" :item="lot"/>
     </div>
   </div>
 </template>
@@ -15,24 +15,17 @@ import Lot from "@/components/Lot";
 export default {
   name: 'MainPage',
   components: {Lot},
-  // data() {
-  //   return {
-  //     lots: []
-  //   }
-  // },
   beforeMount() {
     this.$store.dispatch('setActiveLots');
   },
   computed: {
     lots() {
       return this.$store.getters.getLots;
+    },
+    isAuth() {
+      return this.$store.getters.getIsAuth
     }
   },
-  // watch: {
-  //   activeLots(val) {
-  //     this.lots = val;
-  //   }
-  // },
   methods: {
     addLot() {
       this.$router.push({name: 'newLot'})

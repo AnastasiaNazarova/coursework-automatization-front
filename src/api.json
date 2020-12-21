@@ -11,5 +11,20 @@
     "addRate": "/rate/add",
     "getActiveRates": "/rate/active/",
     "getClosedRates": "/rate/closed/"
+  },
+  "memberRSO": {
+    "getAllMemberRSO": "/member_rso",
+    "addMemberRSO": "/member_rso/add"
+  },
+
+  "groups": {
+    "getAllGroup": "/group",
+    "addGroup": "/group/add"
+  },
+
+  "staffs": {
+    "getAllStaff": "/staff",
+    "addStaff": "/staff/add"
   }
+
 }

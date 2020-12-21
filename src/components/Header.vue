@@ -1,119 +1,13 @@
 <template>
   <v-app-bar app>
-    <v-toolbar-title class="header-title" @click="goHome">Аукцион</v-toolbar-title>
+    <v-toolbar-title class="header-title" @click="goHome">О РСО</v-toolbar-title>
     <v-spacer></v-spacer>
-    <div v-if="isAuth">
-      <v-btn text @click="openCabinet">{{ login }}</v-btn>
-      <v-btn text @click="logout">Выйти</v-btn>
-    </div>
-    <div v-else>
-      <v-dialog
-          v-model="authForm"
-          persistent
-          max-width="600px"
-      >
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn
-              text
-              v-bind="attrs"
-              v-on="on"
-              @click="openAuthForm"
-          >
-            Войти
-          </v-btn>
-          <v-btn
-              text
-              v-bind="attrs"
-              v-on="on"
-              @click="openRegistrationForm"
-          >
-            Зарегистрироваться
-          </v-btn>
-        </template>
-        <v-card>
-          <v-card-title>
-            <span class="headline">Авторизация</span>
-          </v-card-title>
-          <v-card-text>
-            <v-container>
-              <v-form ref="form" lazy-validation>
-                <v-row>
-                  <v-col
-                      v-if="isOpenRegistrationForm"
-                      cols="12"
-                      sm="6"
-                      md="4"
-                  >
-                    <v-text-field
-                        v-model="surname"
-                        :rules="surnameRules"
-                        label="Фамилия"
-                        required
-                    />
-                  </v-col>
-                  <v-col
-                      v-if="isOpenRegistrationForm"
-                      cols="12"
-                      sm="6"
-                      md="4"
-                  >
-                    <v-text-field
-                        v-model="name"
-                        :rules="nameRules"
-                        label="Имя"
-                        required
-                    />
-                  </v-col>
-                  <v-col cols="12">
-                    <v-text-field
-                        v-model="login"
-                        :rules="loginRules"
-                        label="Email"
-                        required
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12">
-                    <v-text-field
-                        v-model="password"
-                        :rules="passwordRules"
-                        label="Пароль"
-                        type="password"
-                        required
-                    ></v-text-field>
-                  </v-col>
-                </v-row>
-              </v-form>
-            </v-container>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn
-                color="blue darken-1"
-                text
-                @click="closeAuthForm"
-            >
-              Закрыть
-            </v-btn>
-            <v-btn
-                v-if="isOpenAuthForm"
-                color="blue darken-1"
-                text
-                @click="signIn"
-            >
-              Войти
-            </v-btn>
-            <v-btn
-                v-if="isOpenRegistrationForm"
-                color="blue darken-1"
-                text
-                @click="signUp"
-            >
-              Зарегистрироваться
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </div>
+    <v-toolbar-title class="header-title" @click="openStaff">Штабы</v-toolbar-title>
+    <v-spacer></v-spacer>
+    <v-toolbar-title class="header-title" @click="openGroup">Отряды</v-toolbar-title>
+    <v-spacer></v-spacer>
+    <v-toolbar-title class="header-title" @click="openMemberRSO">Члены РСО</v-toolbar-title>
+    <v-spacer></v-spacer>
   </v-app-bar>
 </template>
 
@@ -122,17 +16,6 @@ export default {
   name: 'Header',
   data() {
     return {
-      authForm: false,
-      surname: null,
-      surnameRules: [v => !!v || 'Введите фамилию'],
-      name: null,
-      nameRules: [v => !!v || 'Введите имя'],
-      login: null,
-      loginRules: [v => !!v || 'Введите логин'],
-      password: null,
-      passwordRules: [v => !!v || 'Введите пароль'],
-      isOpenAuthForm: false,
-      isOpenRegistrationForm: false
     }
   },
   computed: {
@@ -145,48 +28,27 @@ export default {
     }
   },
   methods: {
-    openAuthForm() {
-      this.isOpenAuthForm = true;
-    },
-    openRegistrationForm() {
-      this.isOpenRegistrationForm = true;
-    },
-    closeAuthForm() {
-      this.authForm = false;
-      this.isOpenAuthForm = false;
-      this.isOpenRegistrationForm = false;
-      this.login = null;
-      this.password = null;
-    },
-    signIn() {
-      if (this.$refs.form.validate()) {
-        this.$store.dispatch('loginUser', {
-          login: this.login,
-          password: this.password
-        })
-        this.closeAuthForm();
+
+    openStaff()
+    {
+      if (this.$route.name !== 'staff') {
+        this.$router.push({name: 'staff'});
       }
     },
-    signUp() {
-      if (this.$refs.form.validate()) {
-        this.$store.dispatch('registrationUser', {
-          surname: this.surname,
-          name: this.name,
-          login: this.login,
-          password: this.password
-        })
-        //TODO регистрация прошла успешно
-        this.closeAuthForm();
+    openGroup()
+    {
+      if (this.$route.name !== 'group') {
+        this.$router.push({name: 'group'});
       }
     },
-    openCabinet() {
-      if (this.$route.name !== 'cabinet') {
-        this.$router.push({name: 'cabinet'});
-      }
+
+    openMemberRSO()
+    {
+        if (this.$route.name !== 'memberRSO') {
+            this.$router.push({name: 'memberRSO'});
+        }
     },
-    logout() {
-      this.$store.dispatch('logoutUser')
-    },
+
     goHome() {
       if (this.$route.name !== 'mainPage') {
         this.$router.push({name: 'mainPage'});
