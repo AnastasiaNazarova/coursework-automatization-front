@@ -6,7 +6,6 @@
       :items="membersRSO"
       >
 
-
      <template v-slot:top>
             <v-toolbar
               flat
@@ -89,7 +88,7 @@
                               :items = "groups"
                               item-text="nameGroup"
                               item-value="id"
-                              v-model="editedItem.groups"
+                              v-model="editedItem.groupId"
                               label="Название отряда"
                           ></v-overflow-btn>
 
@@ -171,18 +170,21 @@ export default {
       ],
           editedIndex: -1,
           editedItem: {
+            id:-1,
             fullName: '',
             dataBirth: '',
             post: '',
             yearSet: 0,
-            group:'',
+            group:[],
+            groupId:-1,
           },
           defaultItem: {
             fullName: '',
             dataBirth: '',
             post: '',
             yearSet: 0,
-            group:'',
+            group:[],
+            groupId:-1,
           },
 
 
@@ -230,18 +232,20 @@ export default {
           this.editedIndex = this.membersRSO.indexOf(item)
           this.editedItem = Object.assign({}, item)
           this.dialog = true
+          this.editedItem.id=item.id
         },
 
         deleteItem (item) {
           this.editedIndex = this.membersRSO.indexOf(item)
           this.editedItem = Object.assign({}, item)
           this.dialogDelete = true
-          this.$store.dispatch('deleteMemberRSO', this.editedIndex+1 )
+          this.editedItem.id=item.id
         },
 
         deleteItemConfirm () {
           this.membersRSO.splice(this.editedIndex, 1)
           this.closeDelete()
+          this.$store.dispatch('deleteMemberRSO', this.editedItem.id )
         },
 
         close () {
@@ -263,13 +267,22 @@ export default {
         save () {
           if (this.editedIndex > -1) {
             Object.assign(this.membersRSO[this.editedIndex], this.editedItem)
-
+            this.$store.dispatch('addMemberRSO', {
+              id: this.editedItem.id,
+              fullName: this.editedItem.fullName,
+              dataBirth: new Date(this.editedItem.dataBirth),
+              group: this.groups.find(x => x.id === this.editedItem.groupId),
+              groupId:this.editedItem.groupId,
+              post: this.editedItem.post,
+              yearSet: this.editedItem.yearSet
+            })
           } else {
             this.membersRSO.push(this.editedItem)
             this.$store.dispatch('addMemberRSO', {
               fullName: this.editedItem.fullName,
               dataBirth: new Date(this.editedItem.dataBirth),
-              group: this.editedItem.group,
+              group: this.groups.find(x => x.id === this.editedItem.groupId),
+              groupId:this.editedItem.groupId,
               post: this.editedItem.post,
               yearSet: this.editedItem.yearSet
             })

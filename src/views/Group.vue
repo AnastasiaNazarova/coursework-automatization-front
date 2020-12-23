@@ -6,7 +6,6 @@
         :items="groups"
     >
 
-
       <template v-slot:top>
         <v-toolbar
             flat
@@ -68,7 +67,7 @@
                       <v-overflow-btn
                           :items = "staffs"
                           item-text="nameStaff"
-                          item-value="id"
+                          item-value ="id"
                           v-model="editedItem.staffId"
                           label="Название штаба"
                       ></v-overflow-btn>
@@ -125,9 +124,6 @@
         </v-icon>
       </template>
 
-
-
-
     </v-data-table>
   </div>
 </template>
@@ -144,15 +140,15 @@ export default {
         {text: 'Название отряда',value: 'nameGroup'},
         { text: 'Дата создания отряда', value: 'dataCreatedGroup'},
         { text: 'Название штаба', value: 'staff.nameStaff'},
-        { text: 'Actions', value: 'actions', sortable: false },
+        { text: 'Действия', value: 'actions', sortable: false },
       ],
       editedIndex: -1,
       editedItem: {
+        id:-1,
         nameGroup: '',
         dataCreatedGroup: '',
         staff:[],
         staffId:-1,
-
       },
       defaultItem: {
         nameGroup: '',
@@ -160,7 +156,6 @@ export default {
         staff:[],
         staffId:-1,
       },
-
 
       footerProps: {
         'items-per-page-all-text': 'Все',
@@ -209,18 +204,20 @@ export default {
       this.editedIndex = this.groups.indexOf(item)
       this.editedItem = Object.assign({}, item)
       this.dialog = true
+      this.editedItem.id=item.id
     },
 
     deleteItem (item) {
       this.editedIndex = this.groups.indexOf(item)
       this.editedItem = Object.assign({}, item)
       this.dialogDelete = true
-      this.$store.dispatch('deleteGroup',item.id)
+      this.editedItem.id = item.id
     },
 
     deleteItemConfirm () {
       this.groups.splice(this.editedIndex, 1)
       this.closeDelete()
+      this.$store.dispatch('deleteGroup',this.editedItem.id)
     },
 
     close () {
@@ -244,26 +241,26 @@ export default {
       if (this.editedIndex > -1) {
         Object.assign(this.groups[this.editedIndex], this.editedItem)
 
+        this.$store.dispatch('addGroup', {
+          id: this.editedItem.id,
+          nameGroup: this.editedItem.nameGroup,
+          dataCreatedGroup: new Date(this.editedItem.dataCreatedGroup),
+          staffId: this.editedItem.staffId,
+          staff:this.staffs.find(x => x.id === this.editedItem.staffId),
+        })
       }
       else {
         this.groups.push(this.editedItem)
-        console.log("nameGroup:",this.editedItem.nameGroup)
-        console.log("dataCreatedGroup:",this.editedItem.dataCreatedGroup)
-        console.log("staffId:",this.editedItem.staffId)
-        console.log("staff:",this.staffs[this.editedItem.staffId-1])
-
         this.$store.dispatch('addGroup', {
           nameGroup: this.editedItem.nameGroup,
           dataCreatedGroup: new Date(this.editedItem.dataCreatedGroup),
           staffId: this.editedItem.staffId,
-          staff:this.staffs[this.editedItem.staffId-1],
+          staff: this.staffs.find(x => x.id === this.editedItem.staffId),
         })
-
       }
       this.close()
     }
   }
-
 
 }
 </script>

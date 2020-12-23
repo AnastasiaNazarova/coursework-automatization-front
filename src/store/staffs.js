@@ -26,9 +26,5 @@ export default {
             await staffs.deleteStaff(value);
         },
 
-        async updateStaff({commit, state}, obj) {
-            await staffs.updateStaff(value);
-        },
-
     }
 }

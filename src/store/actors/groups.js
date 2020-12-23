@@ -16,7 +16,4 @@ export default class Groups {
         return await Groups.http.get(api.groups.deleteGroup+ `?id=${idItem}`)
     }
 
-    static async updateStaff(obj) {
-        return await Groups.http.post(api.groups.updateGroup,obj)
-    }
 }

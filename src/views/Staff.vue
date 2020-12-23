@@ -5,7 +5,6 @@
         :headers="headers"
         :items="staffs"
     >
-
       <template v-slot:top>
         <v-toolbar
             flat
@@ -111,9 +110,6 @@
         </v-icon>
       </template>
 
-
-
-
     </v-data-table>
   </div>
 </template>
@@ -129,10 +125,11 @@ export default {
       headers: [
         {text: 'Название штаба',value: 'nameStaff'},
         { text: 'Дата создания штаба', value: 'dataCreatedStaff'},
-        { text: 'Actions', value: 'actions', sortable: false },
+        { text: 'Действия', value: 'actions', sortable: false },
       ],
       editedIndex: -1,
       editedItem: {
+        id:-1,
         nameStaff: '',
         dataCreatedStaff: '',
         staffId:-1,
@@ -159,17 +156,14 @@ export default {
     formTitle () {
       return this.editedIndex === -1 ? 'Новый элемент' : 'Изменить элемент'
     },
-    staffs() {
 
+    staffs() {
       return this.$store.getters.getStaffs.map(staff => {
         const newStaff = Object.assign({}, staff);
         newStaff.dataCreatedStaff = new Date(newStaff.dataCreatedStaff).toLocaleDateString();
         return newStaff
       })
     },
-
-
-
   },
 
   watch: {
@@ -182,23 +176,24 @@ export default {
   },
 
   methods: {
-
     editItem (item) {
       this.editedIndex = this.staffs.indexOf(item)
       this.editedItem = Object.assign({}, item)
       this.dialog = true
+      this.editedItem.id=item.id
     },
 
     deleteItem (item) {
       this.editedIndex = this.staffs.indexOf(item)
       this.editedItem = Object.assign({}, item)
       this.dialogDelete = true
-      this.$store.dispatch('deleteStaff',item.id)
+      this.editedItem.id=item.id
     },
 
     deleteItemConfirm () {
       this.staffs.splice(this.editedIndex, 1)
       this.closeDelete()
+      this.$store.dispatch('deleteStaff',this.editedItem.id)
     },
 
     close () {
@@ -220,14 +215,17 @@ export default {
     save () {
       if (this.editedIndex > -1) {
         Object.assign(this.staffs[this.editedIndex], this.editedItem)
-
+        this.$store.dispatch('addStaff', {
+          id:this.editedItem.id,
+          nameStaff: this.editedItem.nameStaff,
+          dataCreatedStaff: new Date(this.editedItem.dataCreatedStaff),
+        })
       } else {
         this.staffs.push(this.editedItem)
         this.$store.dispatch('addStaff', {
           nameStaff: this.editedItem.nameStaff,
           dataCreatedStaff: new Date(this.editedItem.dataCreatedStaff),
         })
-        console.log(this.editedItem.dataCreatedStaff)
       }
       this.close()
     }

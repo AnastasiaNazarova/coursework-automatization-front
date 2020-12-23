@@ -23,9 +23,7 @@ export default {
         async deleteMemberRSO({commit, state}, value) {
             await MemberRSO.deleteMemberRSO(value);
         },
-        async updateMemberRSO({commit, state}, obj) {
-            await MemberRSO.updateMemberRSO(obj)
-        },
+
     }
 
 }

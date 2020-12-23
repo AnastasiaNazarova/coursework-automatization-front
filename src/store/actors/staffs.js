@@ -16,7 +16,4 @@ export default class Staffs {
         return await Staffs.http.get(api.staffs.deleteStaff+ `?id=${idItem}`)
     }
 
-    static async updateStaff(obj) {
-        return await Staffs.http.post(api.staffs.updateStaff,obj)
-    }
 }
