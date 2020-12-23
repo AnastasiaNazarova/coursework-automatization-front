@@ -16,8 +16,15 @@ export default {
         async setAllGroups({commit, state}) {
             commit('setGroups', await Groups.getAllGroup());
         },
-        async addGroups({commit, state}, obj) {
+        async addGroup({commit, state}, obj) {
+            console.log("group",obj)
             await Groups.addGroup(obj)
-        }
+        },
+        async deleteGroup({commit, state}, value) {
+            await Groups.deleteGroup(value);
+        },
+        async updateGroup({commit, state}, obj) {
+            await Groups.updateGroup(obj);
+        },
     }
 }

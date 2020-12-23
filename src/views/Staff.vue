@@ -135,10 +135,12 @@ export default {
       editedItem: {
         nameStaff: '',
         dataCreatedStaff: '',
+        staffId:-1,
       },
       defaultItem: {
         nameStaff: '',
         dataCreatedStaff: '',
+        staffId:-1,
       },
 
 
@@ -158,8 +160,15 @@ export default {
       return this.editedIndex === -1 ? 'Новый элемент' : 'Изменить элемент'
     },
     staffs() {
-      return this.$store.getters.getStaffs;
+
+      return this.$store.getters.getStaffs.map(staff => {
+        const newStaff = Object.assign({}, staff);
+        newStaff.dataCreatedStaff = new Date(newStaff.dataCreatedStaff).toLocaleDateString();
+        return newStaff
+      })
     },
+
+
 
   },
 
@@ -184,6 +193,7 @@ export default {
       this.editedIndex = this.staffs.indexOf(item)
       this.editedItem = Object.assign({}, item)
       this.dialogDelete = true
+      this.$store.dispatch('deleteStaff',item.id)
     },
 
     deleteItemConfirm () {
@@ -211,13 +221,13 @@ export default {
       if (this.editedIndex > -1) {
         Object.assign(this.staffs[this.editedIndex], this.editedItem)
 
-        this.$store.dispatch('addStaff', {
-          nameStaff: this.editedItem.nameStaff,
-          dataCreatedStaff: this.editedItem.dataCreatedStaff,
-        })
-
       } else {
         this.staffs.push(this.editedItem)
+        this.$store.dispatch('addStaff', {
+          nameStaff: this.editedItem.nameStaff,
+          dataCreatedStaff: new Date(this.editedItem.dataCreatedStaff),
+        })
+        console.log(this.editedItem.dataCreatedStaff)
       }
       this.close()
     }

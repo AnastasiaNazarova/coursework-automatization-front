@@ -3,7 +3,8 @@ import staffs from "@/store/actors/staffs";
 
 export default {
     state: {
-        staffs: []
+        staffs: [],
+
     },
     getters: {
         getStaffs: state => state.staffs
@@ -19,6 +20,15 @@ export default {
         },
         async addStaff({commit, state}, obj) {
             await staffs.addStaff(obj)
-        }
+        },
+
+        async deleteStaff({commit, state}, value) {
+            await staffs.deleteStaff(value);
+        },
+
+        async updateStaff({commit, state}, obj) {
+            await staffs.updateStaff(value);
+        },
+
     }
 }

@@ -11,4 +11,8 @@ export default class MemberRSO {
     static async addMemberRSO(obj) {
         return await MemberRSO.http.post(api.memberRSO.addMemberRSO, obj)
     }
+
+    static async deleteMemberRSO(idItem) {
+        return await MemberRSO.http.get(api.memberRSO.deleteMemberRSO+ `?id=${idItem}`)
+    }
 }

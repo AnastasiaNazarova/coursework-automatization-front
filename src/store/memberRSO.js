@@ -1,5 +1,6 @@
 import MemberRSO from './actors/memberRSO';
 
+
 export default {
     state: {
         memberRSO: []
@@ -18,6 +19,13 @@ export default {
         },
         async addMemberRSO({commit, state}, obj) {
             await MemberRSO.addMemberRSO(obj)
-        }
+        },
+        async deleteMemberRSO({commit, state}, value) {
+            await MemberRSO.deleteMemberRSO(value);
+        },
+        async updateMemberRSO({commit, state}, obj) {
+            await MemberRSO.updateMemberRSO(obj)
+        },
     }
+
 }

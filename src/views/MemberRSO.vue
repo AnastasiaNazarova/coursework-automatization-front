@@ -85,10 +85,14 @@
                           sm="6"
                           md="4"
                         >
-                          <v-text-field
-                            v-model="editedItem.group"
-                            label="Отряд"
-                          ></v-text-field>
+                          <v-overflow-btn
+                              :items = "groups"
+                              item-text="nameGroup"
+                              item-value="id"
+                              v-model="editedItem.groups"
+                              label="Название отряда"
+                          ></v-overflow-btn>
+
                         </v-col>
                       </v-row>
                     </v-container>
@@ -192,15 +196,23 @@ export default {
    },
  beforeMount() {
     this.$store.dispatch('setAllMemberRSO');
+    this.$store.dispatch('setAllGroups');
   },
     computed: {
         formTitle () {
            return this.editedIndex === -1 ? 'Новый элемент' : 'Изменить элемент'
          },
       membersRSO() {
-        return this.$store.getters.getMemberRSO;
+        return this.$store.getters.getMemberRSO.map(member => {
+          const newMemberRSO = Object.assign({}, member);
+          newMemberRSO.dataBirth = new Date(newMemberRSO.dataBirth).toLocaleDateString();
+          return newMemberRSO
+        })
       },
-
+      groups()
+      {
+        return this.$store.getters.getGroups
+      }
     },
 
     watch: {
@@ -224,6 +236,7 @@ export default {
           this.editedIndex = this.membersRSO.indexOf(item)
           this.editedItem = Object.assign({}, item)
           this.dialogDelete = true
+          this.$store.dispatch('deleteMemberRSO', this.editedIndex+1 )
         },
 
         deleteItemConfirm () {
@@ -251,6 +264,8 @@ export default {
           if (this.editedIndex > -1) {
             Object.assign(this.membersRSO[this.editedIndex], this.editedItem)
 
+          } else {
+            this.membersRSO.push(this.editedItem)
             this.$store.dispatch('addMemberRSO', {
               fullName: this.editedItem.fullName,
               dataBirth: new Date(this.editedItem.dataBirth),
@@ -258,9 +273,6 @@ export default {
               post: this.editedItem.post,
               yearSet: this.editedItem.yearSet
             })
-
-          } else {
-            this.membersRSO.push(this.editedItem)
           }
           this.close()
         }

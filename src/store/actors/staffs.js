@@ -11,4 +11,12 @@ export default class Staffs {
     static async addStaff(obj) {
         return await Staffs.http.post(api.staffs.addStaff, obj)
     }
+
+    static async deleteStaff(idItem) {
+        return await Staffs.http.get(api.staffs.deleteStaff+ `?id=${idItem}`)
+    }
+
+    static async updateStaff(obj) {
+        return await Staffs.http.post(api.staffs.updateStaff,obj)
+    }
 }

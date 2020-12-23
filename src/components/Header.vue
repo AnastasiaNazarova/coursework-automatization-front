@@ -19,13 +19,7 @@ export default {
     }
   },
   computed: {
-    isAuth() {
-      const auth = this.$store.getters.getIsAuth
-      if (auth) {
-        this.login = this.$store.getters.getUserInfo.login
-      }
-      return auth
-    }
+
   },
   methods: {
 

@@ -1,8 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Index from '@/views/Index';
-import NewLot from '@/views/NewLot';
-import Cabinet from '@/views/Cabinet';
 import MemberRSO from '@/views/MemberRSO';
 import Group from '@/views/Group';
 import Staff from '@/views/Staff';
@@ -18,16 +16,7 @@ const router = new Router({
             name: 'mainPage',
             component: Index
         },
-        {
-            path: '/newLot',
-            name: 'newLot',
-            component: NewLot
-        },
-        {
-            path: '/cabinet',
-            name: 'cabinet',
-            component: Cabinet
-        },
+
         {
             path: '/memberRSO',
             name: 'memberRSO',
