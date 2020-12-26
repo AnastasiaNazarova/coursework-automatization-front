@@ -2,9 +2,9 @@
   <v-app-bar app>
     <v-toolbar-title class="header-title" @click="goHome">О РСО</v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-toolbar-title class="header-title" @click="openStaff">Штабы</v-toolbar-title>
+    <v-toolbar-title class="header-title" id = "openStaff" @click="openStaff">Штабы</v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-toolbar-title class="header-title" @click="openGroup">Отряды</v-toolbar-title>
+    <v-toolbar-title class="header-title" id = "openGroup" @click="openGroup">Отряды</v-toolbar-title>
     <v-spacer></v-spacer>
     <v-toolbar-title class="header-title" @click="openMemberRSO">Члены РСО</v-toolbar-title>
     <v-spacer></v-spacer>

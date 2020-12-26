@@ -23,6 +23,7 @@
               <v-btn
                   color="primary"
                   dark
+                  id="addItem"
                   class="mb-2"
                   v-bind="attrs"
                   v-on="on"
@@ -44,6 +45,7 @@
                         md="4"
                     >
                       <v-text-field
+                          id="nameStaffTF"
                           v-model="editedItem.nameStaff"
                           label="Название штаба"
                       ></v-text-field>
@@ -54,6 +56,7 @@
                         md="4"
                     >
                       <v-text-field
+                          id="dataCreatedStaffTF"
                           v-model="editedItem.dataCreatedStaff"
                           label="Дата создания штаба"
                       ></v-text-field>
@@ -74,6 +77,7 @@
                 <v-btn
                     color="blue darken-1"
                     text
+                    id="saveBtn"
                     @click="save"
                 >
                   Сохранить
@@ -98,12 +102,14 @@
         <v-icon
             small
             class="mr-2"
+            id="editItemBtn"
             @click="editItem(item)"
         >
           mdi-pencil
         </v-icon>
         <v-icon
             small
+            id="deleteItemBtn"
             @click="deleteItem(item)"
         >
           mdi-delete
@@ -194,6 +200,7 @@ export default {
       this.staffs.splice(this.editedIndex, 1)
       this.closeDelete()
       this.$store.dispatch('deleteStaff',this.editedItem.id)
+      location.reload();
     },
 
     close () {
@@ -220,12 +227,14 @@ export default {
           nameStaff: this.editedItem.nameStaff,
           dataCreatedStaff: new Date(this.editedItem.dataCreatedStaff),
         })
+        location.reload();
       } else {
         this.staffs.push(this.editedItem)
         this.$store.dispatch('addStaff', {
           nameStaff: this.editedItem.nameStaff,
           dataCreatedStaff: new Date(this.editedItem.dataCreatedStaff),
         })
+        location.reload();
       }
       this.close()
     }

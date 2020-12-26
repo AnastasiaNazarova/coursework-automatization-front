@@ -25,6 +25,7 @@
                   color="primary"
                   dark
                   class="mb-2"
+                  id="addItem"
                   v-bind="attrs"
                   v-on="on"
               >
@@ -45,6 +46,7 @@
                         md="4"
                     >
                       <v-text-field
+                          id ="nameGroupTF"
                           v-model="editedItem.nameGroup"
                           label="Название отряда"
                       ></v-text-field>
@@ -55,6 +57,7 @@
                         md="4"
                     >
                       <v-text-field
+                          id ="dataCreatedGroupTF"
                           v-model="editedItem.dataCreatedGroup"
                           label="Дата создания отряда"
                       ></v-text-field>
@@ -65,6 +68,7 @@
                         md="4"
                     >
                       <v-overflow-btn
+                          id ="staffsList"
                           :items = "staffs"
                           item-text="nameStaff"
                           item-value ="id"
